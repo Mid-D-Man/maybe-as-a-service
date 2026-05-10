@@ -1,7 +1,7 @@
 # 🤷 Maybe-as-a-Service
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Mid-D-Man/maybe-as-a-service/main/assets/imgs/maas-banner.png" width="800" alt="Maybe-as-a-Service Banner"/>
+  <img src="https://raw.githubusercontent.com/Mid-D-Man/maybe-as-a-service/main/assets/imgs/maas-banner.jpg" width="800" alt="Maybe-as-a-Service Banner"/>
 </p>
 
 > *"Like Schrödinger's cat, this API's answer is simultaneously yes and no — existing in a quantum superposition of commitment — until you make a decision, at which point it's still maybe."*
