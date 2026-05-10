@@ -17,7 +17,7 @@ Perfect for product roadmaps, relationship status updates, government policy ann
 **The Holy Trinity of Decisiveness:**
 | Service | Answer | Certainty |
 |---|---|---|
-| [yes-as-a-service](https://github.com/lukekarrys/yes-as-a-service) | ✅ Yes | High |
+| [yes-as-a-service](https://github.com/misterdim/yes-as-a-service) | ✅ Yes | High |
 | [no-as-a-service](https://github.com/hotheadhacker/no-as-a-service) | ❌ No | Also high |
 | **maybe-as-a-service** | 🤷 Maybe | *Please do not ask again* |
 
@@ -112,6 +112,48 @@ Open in GitHub Codespaces or VS Code with Dev Containers and it sets itself up a
 
 ---
 
+## 🤝 Contributing
+
+Contributions are welcome — probably. We'll see how it goes.
+
+Whether you want to add new maybes, fix a bug, improve the docs, or suggest a feature, the door is open. Possibly.
+
+### Adding new maybe responses
+
+The easiest way to contribute is adding new non-committal responses to `maybes.json`.
+
+A good maybe:
+- Is a complete sentence (or dramatically incomplete one, intentionally)
+- Doesn't actually commit to anything
+- Has its own voice — absurdist, corporate, cultural, technical, cosmic, culinary — all welcome
+- Isn't a duplicate of an existing entry (check first, or don't, we'll probably catch it in review)
+
+### How to contribute
+
+1. **Fork** the repository
+2. **Create a branch**: `git checkout -b my-maybe-additions`
+3. **Make your changes**
+4. **Run the tests**: `npm test`
+5. **Commit**: `git commit -m "feat: add 10 new existential maybes"`
+6. **Push**: `git push origin my-maybe-additions`
+7. **Open a Pull Request** — describe what you added and why it belongs here
+
+### Reporting bugs
+
+Open an issue using the **Bug Report** template. Include steps to reproduce, what you expected, and what actually happened.
+
+### Suggesting features
+
+Open an issue using the **Feature Request** template. Describe the idea. We will consider it. Eventually. Circumstances permitting.
+
+### Code style
+
+- Keep it simple — this is a small Express API
+- Run `npm test` before submitting; the CI will run it anyway and it will be embarrassing
+- No new dependencies without a good reason
+
+---
+
 ## 🐱 A Note on Schrödinger's Cat
 
 Erwin Schrödinger proposed a thought experiment in which a cat in a box is simultaneously alive and dead until observed.  
@@ -124,7 +166,7 @@ The cat, much like your deadline, remains uncertain.
 
 Built with loving indecision by [Mid-D-Man](https://github.com/Mid-D-Man).  
 Inspired by [no-as-a-service](https://github.com/hotheadhacker/no-as-a-service) by hotheadhacker.  
-Completing the trilogy started by [yes-as-a-service](https://github.com/lukekarrys/yes-as-a-service).
+Completing the trilogy started by [yes-as-a-service](https://github.com/misterdim/yes-as-a-service).
 
 ---
 
