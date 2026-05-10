@@ -1,12 +1,13 @@
 {
-  "name": "no-as-service",
+  "name": "maybe-as-a-service",
   "version": "1.0.0",
-  "description": "A lightweight API that returns random rejection or no reasons.",
+  "description": "A lightweight API returning random non-committal maybe responses. Like Schrödinger's cat — the answer is both yes and no until observed, and even then... we'll see. Inshallah.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "node --test test/api.test.js"
   },
-  "author": "hotheadhacker",
+  "author": "Mid-D-Man",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
