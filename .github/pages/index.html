@@ -21,7 +21,7 @@
       --bg:         #160e06;
     }
 
-    html, body { height: 100%; }
+    html { font-size: 16px; }
 
     body {
       background-color: var(--bg);
@@ -32,12 +32,12 @@
       color: var(--ink);
       min-height: 100vh;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 2rem 1rem;
     }
 
-    /* ── Animated film-grain noise ── */
+    /* ── Film grain ── */
     .noise {
       position: fixed;
       inset: -25%;
@@ -45,83 +45,71 @@
       height: 150%;
       pointer-events: none;
       z-index: 9999;
-      opacity: 0.06;
+      opacity: 0.055;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)'/%3E%3C/svg%3E");
       animation: grain 0.35s steps(1) infinite;
     }
-
     @keyframes grain {
-      0%   { transform: translate(0,     0    ); }
-      10%  { transform: translate(-4%,   3%   ); }
-      20%  { transform: translate( 5%,  -4%   ); }
-      30%  { transform: translate(-3%,   6%   ); }
-      40%  { transform: translate( 6%,  -2%   ); }
-      50%  { transform: translate(-5%,   4%   ); }
-      60%  { transform: translate( 4%,  -6%   ); }
-      70%  { transform: translate(-6%,   2%   ); }
-      80%  { transform: translate( 3%,  -5%   ); }
-      90%  { transform: translate(-2%,   6%   ); }
+      0%   { transform: translate(0,    0   ); }
+      10%  { transform: translate(-4%,  3%  ); }
+      20%  { transform: translate( 5%, -4%  ); }
+      30%  { transform: translate(-3%,  6%  ); }
+      40%  { transform: translate( 6%, -2%  ); }
+      50%  { transform: translate(-5%,  4%  ); }
+      60%  { transform: translate( 4%, -6%  ); }
+      70%  { transform: translate(-6%,  2%  ); }
+      80%  { transform: translate( 3%, -5%  ); }
+      90%  { transform: translate(-2%,  6%  ); }
     }
 
-    /* ── Paper card ── */
+    /* ── Card ── */
     .card {
       position: relative;
       background: var(--paper);
       background-image:
-        /* subtle crosshatch paper texture */
         repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 28px,
-          rgba(160, 100, 40, 0.04) 28px,
-          rgba(160, 100, 40, 0.04) 29px
+          0deg, transparent, transparent 28px,
+          rgba(160,100,40,0.04) 28px, rgba(160,100,40,0.04) 29px
         ),
         repeating-linear-gradient(
-          90deg,
-          transparent,
-          transparent 28px,
-          rgba(160, 100, 40, 0.03) 28px,
-          rgba(160, 100, 40, 0.03) 29px
+          90deg, transparent, transparent 28px,
+          rgba(160,100,40,0.03) 28px, rgba(160,100,40,0.03) 29px
         );
-      max-width: 660px;
       width: 100%;
+      max-width: 660px;
       padding: 3rem 3.5rem 2.5rem;
       box-shadow:
-        inset 0 0 100px rgba(80, 35, 5, 0.18),
-        0 0 0 1px rgba(100, 55, 10, 0.35),
+        inset 0 0 100px rgba(80,35,5,0.18),
+        0 0 0 1px rgba(100,55,10,0.35),
         0 0 0 7px var(--bg),
-        0 0 0 8px rgba(100, 55, 10, 0.2),
-        6px 10px 50px rgba(0, 0, 0, 0.75);
+        0 0 0 8px rgba(100,55,10,0.2),
+        6px 10px 50px rgba(0,0,0,0.75);
     }
 
-    /* dog-eared corner */
+    /* dog-ear */
     .card::after {
       content: '';
       position: absolute;
       bottom: 0; right: 0;
-      width: 44px; height: 44px;
-      background: linear-gradient(
-        225deg,
-        var(--bg) 50%,
-        var(--paper-dark) 50%
-      );
+      width: 40px; height: 40px;
+      background: linear-gradient(225deg, var(--bg) 50%, var(--paper-dark) 50%);
     }
 
-    /* ── Circular stamp ── */
+    /* ── Stamp ── */
     .stamp {
       position: absolute;
       top: 1.6rem; right: 1.8rem;
-      width: 72px; height: 72px;
+      width: 68px; height: 68px;
       border: 2.5px solid var(--accent);
       border-radius: 50%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1px;
       opacity: 0.22;
       transform: rotate(-14deg);
       pointer-events: none;
+      flex-shrink: 0;
     }
     .stamp::before {
       content: '';
@@ -139,6 +127,23 @@
       line-height: 1.5;
     }
 
+    /* ── Ornament SVG divider ── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1.2rem 0;
+      color: var(--faded);
+      width: 100%;
+      overflow: hidden;
+    }
+    .ornament svg {
+      width: 100%;
+      max-width: 320px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
     /* ── Typography ── */
     .eyebrow {
       text-align: center;
@@ -151,52 +156,41 @@
 
     .title {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 2.9rem);
+      font-size: clamp(1.75rem, 5vw, 2.9rem);
       font-weight: 700;
       text-align: center;
       color: var(--ink);
       letter-spacing: 0.02em;
-      line-height: 1.1;
+      line-height: 1.15;
+      word-break: break-word;
     }
     .title em {
       font-style: normal;
       color: var(--accent);
     }
 
-    .ornament {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      margin: 1.1rem 0;
-      color: var(--faded);
-      font-size: 0.7rem;
-      user-select: none;
-    }
-    .ornament::before,
-    .ornament::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(to var(--dir, right), transparent, currentColor);
-    }
-    .ornament::after { --dir: left; }
-
     .subtitle {
       font-family: 'Playfair Display', serif;
       font-style: italic;
-      font-size: 0.82rem;
+      font-size: clamp(0.75rem, 2vw, 0.85rem);
       color: var(--accent);
       text-align: center;
-      line-height: 1.7;
-      padding: 0 0.5rem;
+      line-height: 1.75;
+      padding: 0 0.25rem;
     }
 
     /* ── Trinity table ── */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 1.6rem 0;
+    }
     .trinity {
       width: 100%;
+      min-width: 280px;
       border-collapse: collapse;
-      margin: 1.6rem 0;
-      font-size: 0.77rem;
+      font-size: clamp(0.7rem, 2vw, 0.78rem);
     }
     .trinity th {
       font-family: 'Special Elite', cursive;
@@ -207,10 +201,12 @@
       padding: 0.3rem 0.6rem;
       border-bottom: 1px solid var(--paper-dark);
       text-align: left;
+      white-space: nowrap;
     }
     .trinity td {
       padding: 0.5rem 0.6rem;
       border-bottom: 1px dashed #ceab7a;
+      vertical-align: middle;
     }
     .trinity tr:last-child td { border-bottom: none; }
     .trinity .active td {
@@ -220,14 +216,27 @@
     .trinity a { color: inherit; text-decoration: none; }
     .trinity a:hover { text-decoration: underline; }
 
+    .trinity .icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+    .trinity svg {
+      flex-shrink: 0;
+    }
+
+    /* hide certainty col on very small screens */
+    .col-certainty { }
+
     /* ── Response area ── */
     .response-wrap {
       position: relative;
-      margin: 1.8rem 0 0.5rem;
+      margin: 1.6rem 0 0.4rem;
     }
     .response-label {
       position: absolute;
-      top: -0.58rem;
+      top: -0.55rem;
       left: 1rem;
       background: var(--paper);
       padding: 0 0.4rem;
@@ -235,25 +244,26 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--faded);
+      white-space: nowrap;
     }
     .response-box {
       background: var(--paper-dark);
       border: 1px solid #c4a06a;
       border-left: 3px solid var(--accent);
-      padding: 1.3rem 1.5rem;
-      min-height: 90px;
+      padding: 1.2rem 1.4rem;
+      min-height: 86px;
       display: flex;
       align-items: center;
     }
     .response-text {
-      font-size: 1rem;
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
       line-height: 1.65;
       color: var(--ink);
       transition: opacity 0.25s;
+      word-break: break-word;
     }
     .response-text.fading { opacity: 0.3; }
 
-    /* blinking caret */
     .caret {
       display: inline-block;
       width: 1.5px;
@@ -271,76 +281,122 @@
     /* ── Counter ── */
     .counter {
       font-size: 0.6rem;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       color: var(--faded);
       text-align: right;
-      margin-top: 0.4rem;
+      margin-top: 0.35rem;
       min-height: 1em;
     }
 
     /* ── Button ── */
-    .btn-wrap { text-align: center; margin-top: 1.6rem; }
-
+    .btn-wrap {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
     .ask-btn {
       font-family: 'Special Elite', cursive;
-      font-size: 0.82rem;
+      font-size: clamp(0.72rem, 2vw, 0.82rem);
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--paper);
       background: var(--accent);
       border: none;
-      padding: 0.9rem 2.8rem;
+      padding: 0.9rem 2.5rem;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-      /* stamp-notched corners */
+      transition: background 0.15s, transform 0.1s;
       clip-path: polygon(
         5px 0%, calc(100% - 5px) 0%,
         100% 5px, 100% calc(100% - 5px),
         calc(100% - 5px) 100%, 5px 100%,
         0% calc(100% - 5px), 0% 5px
       );
+      width: auto;
+      max-width: 100%;
     }
-    .ask-btn:hover:not(:disabled) {
-      background: #8f4522;
-      box-shadow: 0 2px 12px rgba(122, 59, 30, 0.45);
-    }
+    .ask-btn:hover:not(:disabled) { background: #8f4522; }
     .ask-btn:active:not(:disabled) { transform: scale(0.97); }
     .ask-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-    /* ── Footer ── */
-    footer {
-      margin-top: 2rem;
-      text-align: center;
-      font-size: 0.62rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--faded);
-      line-height: 2;
-    }
-    footer a { color: var(--accent); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-
     /* ── API badge ── */
     .api-badge {
+      display: block;
+      text-align: center;
+      margin-top: 1.2rem;
+    }
+    .api-badge span {
       display: inline-block;
       background: var(--ink);
       color: var(--paper-dark);
       font-size: 0.6rem;
       letter-spacing: 0.14em;
-      padding: 0.25rem 0.7rem;
-      margin-top: 1.2rem;
+      padding: 0.28rem 0.8rem;
       text-transform: uppercase;
+      word-break: break-all;
     }
     .api-badge code {
       font-family: 'Special Elite', cursive;
       color: #f0c070;
     }
 
-    @media (max-width: 500px) {
-      .card { padding: 2rem 1.4rem 2rem; }
+    /* ── Footer ── */
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: clamp(0.58rem, 1.5vw, 0.63rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--faded);
+      line-height: 2.2;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Tablet ── */
+    @media (max-width: 600px) {
+      body { padding: 1rem 0.75rem; align-items: flex-start; }
+      .card { padding: 2.2rem 1.6rem 2rem; }
+      .stamp { width: 56px; height: 56px; top: 1rem; right: 1rem; }
+      .stamp-text { font-size: 0.38rem; }
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 420px) {
+      body { padding: 0.75rem 0.5rem; }
+
+      .card {
+        padding: 1.8rem 1.2rem 1.6rem;
+        box-shadow:
+          inset 0 0 60px rgba(80,35,5,0.15),
+          0 0 0 1px rgba(100,55,10,0.3),
+          0 0 0 4px var(--bg),
+          0 0 0 5px rgba(100,55,10,0.15),
+          3px 5px 25px rgba(0,0,0,0.7);
+      }
+      .card::after { width: 30px; height: 30px; }
+
       .stamp { display: none; }
-      .trinity { font-size: 0.7rem; }
-      .title { font-size: 1.9rem; }
+
+      .ornament svg { max-width: 220px; }
+
+      .col-certainty { display: none; }
+
+      .response-box { padding: 1rem 1rem; min-height: 75px; }
+      .response-label { font-size: 0.52rem; }
+
+      .ask-btn {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        clip-path: polygon(
+          4px 0%, calc(100% - 4px) 0%,
+          100% 4px, 100% calc(100% - 4px),
+          calc(100% - 4px) 100%, 4px 100%,
+          0% calc(100% - 4px), 0% 4px
+        );
+      }
+
+      .api-badge span { font-size: 0.55rem; padding: 0.25rem 0.6rem; }
+
+      footer { letter-spacing: 0.08em; line-height: 2; }
     }
   </style>
 </head>
@@ -350,53 +406,97 @@
   <main class="card">
 
     <div class="stamp" aria-hidden="true">
-      <div class="stamp-text">Est.<br/>2026<br/>· MaaS ·</div>
+      <div class="stamp-text">Est.<br/>2026<br/>MaaS</div>
     </div>
 
-    <p class="eyebrow">Mid‑D‑Man presents</p>
+    <p class="eyebrow">Mid-D-Man presents</p>
     <h1 class="title">Maybe<em>-as-a-</em>Service</h1>
 
-    <div class="ornament">❧ ✦ ❧</div>
+    <!-- SVG ornament divider -->
+    <div class="ornament" aria-hidden="true">
+      <svg viewBox="0 0 320 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <line x1="0" y1="7" x2="126" y2="7" stroke="currentColor" stroke-width="0.6" stroke-dasharray="1 0"/>
+        <rect x="132" y="3" width="8" height="8" transform="rotate(45 136 7)" fill="currentColor"/>
+        <rect x="148" y="3.5" width="7" height="7" transform="rotate(45 151.5 7)" fill="none" stroke="currentColor" stroke-width="0.8"/>
+        <rect x="164" y="3" width="8" height="8" transform="rotate(45 168 7)" fill="currentColor"/>
+        <rect x="180" y="3.5" width="7" height="7" transform="rotate(45 183.5 7)" fill="none" stroke="currentColor" stroke-width="0.8"/>
+        <rect x="196" y="3" width="8" height="8" transform="rotate(45 200 7)" fill="currentColor"/>
+        <line x1="206" y1="7" x2="320" y2="7" stroke="currentColor" stroke-width="0.6"/>
+      </svg>
+    </div>
 
     <p class="subtitle">
       "Like Schrödinger's cat, the answer is simultaneously yes and no —<br />
       until observed, at which point it is still <em>maybe.</em>"
     </p>
 
-    <div class="ornament">· · · · · · · · · · · · · · · · ·</div>
+    <div class="ornament" aria-hidden="true">
+      <svg viewBox="0 0 320 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <line x1="0" y1="7" x2="140" y2="7" stroke="currentColor" stroke-width="0.6"/>
+        <circle cx="160" cy="7" r="4" stroke="currentColor" stroke-width="0.8"/>
+        <circle cx="160" cy="7" r="1.5" fill="currentColor"/>
+        <line x1="180" y1="7" x2="320" y2="7" stroke="currentColor" stroke-width="0.6"/>
+      </svg>
+    </div>
 
-    <table class="trinity" aria-label="The decisiveness trinity">
-      <thead>
-        <tr>
-          <th>Service</th>
-          <th>Answer</th>
-          <th>Certainty</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <a href="https://github.com/lukekarrys/yes-as-a-service"
-               target="_blank" rel="noopener">yes-as-a-service</a>
-          </td>
-          <td>✅ Yes</td>
-          <td>High</td>
-        </tr>
-        <tr>
-          <td>
-            <a href="https://github.com/hotheadhacker/no-as-a-service"
-               target="_blank" rel="noopener">no-as-a-service</a>
-          </td>
-          <td>❌ No</td>
-          <td>Also high</td>
-        </tr>
-        <tr class="active">
-          <td>maybe-as-a-service ◂</td>
-          <td>🤷 Maybe</td>
-          <td>Please do not ask</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrap">
+      <table class="trinity" aria-label="The decisiveness trinity">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Answer</th>
+            <th class="col-certainty">Certainty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <a href="https://github.com/lukekarrys/yes-as-a-service"
+                 target="_blank" rel="noopener">yes-as-a-service</a>
+            </td>
+            <td>
+              <span class="icon">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+                  <path d="M3.5 6.5l2 2 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Yes
+              </span>
+            </td>
+            <td class="col-certainty">High</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="https://github.com/hotheadhacker/no-as-a-service"
+                 target="_blank" rel="noopener">no-as-a-service</a>
+            </td>
+            <td>
+              <span class="icon">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+                  <path d="M4.5 4.5l4 4M8.5 4.5l-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+                No
+              </span>
+            </td>
+            <td class="col-certainty">Also high</td>
+          </tr>
+          <tr class="active">
+            <td>maybe-as-a-service</td>
+            <td>
+              <span class="icon">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+                  <path d="M3.5 6.5 C4.2 5 5 5 5.75 6.5 C6.5 8 7.3 8 8 6.5 C8.7 5 9.5 5 10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+                </svg>
+                Maybe
+              </span>
+            </td>
+            <td class="col-certainty"><em>Do not ask</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="response-wrap">
       <span class="response-label">Communiqué</span>
@@ -414,36 +514,44 @@
       </button>
     </div>
 
-    <div style="text-align:center;">
-      <span class="api-badge">
-        GET &nbsp;<code>YOUR_DOMAIN/maybe</code>
-      </span>
+    <div class="api-badge">
+      <span>GET &nbsp;<code>maybe-as-a-service.onrender.com/maybe</code></span>
     </div>
 
-    <div class="ornament" style="margin-top:2rem;">❧ ✦ ❧</div>
+    <div class="ornament" style="margin-top: 2rem;" aria-hidden="true">
+      <svg viewBox="0 0 320 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <line x1="0" y1="7" x2="126" y2="7" stroke="currentColor" stroke-width="0.6"/>
+        <rect x="132" y="3" width="8" height="8" transform="rotate(45 136 7)" fill="currentColor"/>
+        <rect x="148" y="3.5" width="7" height="7" transform="rotate(45 151.5 7)" fill="none" stroke="currentColor" stroke-width="0.8"/>
+        <rect x="164" y="3" width="8" height="8" transform="rotate(45 168 7)" fill="currentColor"/>
+        <rect x="180" y="3.5" width="7" height="7" transform="rotate(45 183.5 7)" fill="none" stroke="currentColor" stroke-width="0.8"/>
+        <rect x="196" y="3" width="8" height="8" transform="rotate(45 200 7)" fill="currentColor"/>
+        <line x1="206" y1="7" x2="320" y2="7" stroke="currentColor" stroke-width="0.6"/>
+      </svg>
+    </div>
 
     <footer>
       <p>
         Built by
-        <a href="https://github.com/Mid-D-Man" target="_blank" rel="noopener">Mid‑D‑Man</a>
+        <a href="https://github.com/Mid-D-Man" target="_blank" rel="noopener">Mid-D-Man</a>
         &nbsp;·&nbsp;
-        <a href="https://github.com/Mid-D-Man/maybe-as-a-service"
-           target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/Mid-D-Man/maybe-as-a-service" target="_blank" rel="noopener">GitHub</a>
         &nbsp;·&nbsp;
         MIT License — probably
       </p>
       <p>
-        Part of the trinity:
+        The trinity —
         <a href="https://github.com/lukekarrys/yes-as-a-service" target="_blank" rel="noopener">Yes</a>
         &nbsp;·&nbsp;
         <a href="https://github.com/hotheadhacker/no-as-a-service" target="_blank" rel="noopener">No</a>
-        &nbsp;·&nbsp; Maybe
+        &nbsp;·&nbsp;
+        Maybe
       </p>
     </footer>
   </main>
 
   <script>
-    // ── Set this to your deployed API URL before pushing ─────────────────
+    // ── Update if your API URL changes ────────────────────────────────────
     const API_URL = 'https://maybe-as-a-service.onrender.com/maybe';
     // ─────────────────────────────────────────────────────────────────────
 
@@ -463,7 +571,8 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const { maybe } = await res.json();
         askCount++;
-        counterEl.textContent = `Consulted ${askCount} time${askCount > 1 ? 's' : ''} — still no commitment.`;
+        counterEl.textContent =
+          `Consulted ${askCount} time${askCount > 1 ? 's' : ''} — still no commitment.`;
         responseEl.classList.remove('fading');
         typewrite(maybe);
       } catch (err) {
@@ -496,4 +605,4 @@
     }
   </script>
 </body>
-  </html>
+</html>
