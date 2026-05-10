@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maybe as a Service</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:        #1a0f0a;
+      --paper:      #f2ddb7;
+      --paper-dark: #e5c99a;
+      --accent:     #7a3b1e;
+      --faded:      #a07848;
+      --bg:         #160e06;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse at 20% 40%, #2a1608 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 60%, #1e1004 0%, transparent 55%);
+      font-family: 'Special Elite', cursive;
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* ── Animated film-grain noise ── */
+    .noise {
+      position: fixed;
+      inset: -25%;
+      width: 150%;
+      height: 150%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.06;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: grain 0.35s steps(1) infinite;
+    }
+
+    @keyframes grain {
+      0%   { transform: translate(0,     0    ); }
+      10%  { transform: translate(-4%,   3%   ); }
+      20%  { transform: translate( 5%,  -4%   ); }
+      30%  { transform: translate(-3%,   6%   ); }
+      40%  { transform: translate( 6%,  -2%   ); }
+      50%  { transform: translate(-5%,   4%   ); }
+      60%  { transform: translate( 4%,  -6%   ); }
+      70%  { transform: translate(-6%,   2%   ); }
+      80%  { transform: translate( 3%,  -5%   ); }
+      90%  { transform: translate(-2%,   6%   ); }
+    }
+
+    /* ── Paper card ── */
+    .card {
+      position: relative;
+      background: var(--paper);
+      background-image:
+        /* subtle crosshatch paper texture */
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 28px,
+          rgba(160, 100, 40, 0.04) 28px,
+          rgba(160, 100, 40, 0.04) 29px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 28px,
+          rgba(160, 100, 40, 0.03) 28px,
+          rgba(160, 100, 40, 0.03) 29px
+        );
+      max-width: 660px;
+      width: 100%;
+      padding: 3rem 3.5rem 2.5rem;
+      box-shadow:
+        inset 0 0 100px rgba(80, 35, 5, 0.18),
+        0 0 0 1px rgba(100, 55, 10, 0.35),
+        0 0 0 7px var(--bg),
+        0 0 0 8px rgba(100, 55, 10, 0.2),
+        6px 10px 50px rgba(0, 0, 0, 0.75);
+    }
+
+    /* dog-eared corner */
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 44px; height: 44px;
+      background: linear-gradient(
+        225deg,
+        var(--bg) 50%,
+        var(--paper-dark) 50%
+      );
+    }
+
+    /* ── Circular stamp ── */
+    .stamp {
+      position: absolute;
+      top: 1.6rem; right: 1.8rem;
+      width: 72px; height: 72px;
+      border: 2.5px solid var(--accent);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      opacity: 0.22;
+      transform: rotate(-14deg);
+      pointer-events: none;
+    }
+    .stamp::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+    }
+    .stamp-text {
+      font-size: 0.42rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ── Typography ── */
+    .eyebrow {
+      text-align: center;
+      font-size: 0.65rem;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--faded);
+      margin-bottom: 0.6rem;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 2.9rem);
+      font-weight: 700;
+      text-align: center;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+    }
+    .title em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin: 1.1rem 0;
+      color: var(--faded);
+      font-size: 0.7rem;
+      user-select: none;
+    }
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to var(--dir, right), transparent, currentColor);
+    }
+    .ornament::after { --dir: left; }
+
+    .subtitle {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--accent);
+      text-align: center;
+      line-height: 1.7;
+      padding: 0 0.5rem;
+    }
+
+    /* ── Trinity table ── */
+    .trinity {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.6rem 0;
+      font-size: 0.77rem;
+    }
+    .trinity th {
+      font-family: 'Special Elite', cursive;
+      font-weight: normal;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--faded);
+      padding: 0.3rem 0.6rem;
+      border-bottom: 1px solid var(--paper-dark);
+      text-align: left;
+    }
+    .trinity td {
+      padding: 0.5rem 0.6rem;
+      border-bottom: 1px dashed #ceab7a;
+    }
+    .trinity tr:last-child td { border-bottom: none; }
+    .trinity .active td {
+      color: var(--accent);
+      font-style: italic;
+    }
+    .trinity a { color: inherit; text-decoration: none; }
+    .trinity a:hover { text-decoration: underline; }
+
+    /* ── Response area ── */
+    .response-wrap {
+      position: relative;
+      margin: 1.8rem 0 0.5rem;
+    }
+    .response-label {
+      position: absolute;
+      top: -0.58rem;
+      left: 1rem;
+      background: var(--paper);
+      padding: 0 0.4rem;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--faded);
+    }
+    .response-box {
+      background: var(--paper-dark);
+      border: 1px solid #c4a06a;
+      border-left: 3px solid var(--accent);
+      padding: 1.3rem 1.5rem;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+    }
+    .response-text {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--ink);
+      transition: opacity 0.25s;
+    }
+    .response-text.fading { opacity: 0.3; }
+
+    /* blinking caret */
+    .caret {
+      display: inline-block;
+      width: 1.5px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 1px;
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* ── Counter ── */
+    .counter {
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      color: var(--faded);
+      text-align: right;
+      margin-top: 0.4rem;
+      min-height: 1em;
+    }
+
+    /* ── Button ── */
+    .btn-wrap { text-align: center; margin-top: 1.6rem; }
+
+    .ask-btn {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.82rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--paper);
+      background: var(--accent);
+      border: none;
+      padding: 0.9rem 2.8rem;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+      /* stamp-notched corners */
+      clip-path: polygon(
+        5px 0%, calc(100% - 5px) 0%,
+        100% 5px, 100% calc(100% - 5px),
+        calc(100% - 5px) 100%, 5px 100%,
+        0% calc(100% - 5px), 0% 5px
+      );
+    }
+    .ask-btn:hover:not(:disabled) {
+      background: #8f4522;
+      box-shadow: 0 2px 12px rgba(122, 59, 30, 0.45);
+    }
+    .ask-btn:active:not(:disabled) { transform: scale(0.97); }
+    .ask-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--faded);
+      line-height: 2;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── API badge ── */
+    .api-badge {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--paper-dark);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      padding: 0.25rem 0.7rem;
+      margin-top: 1.2rem;
+      text-transform: uppercase;
+    }
+    .api-badge code {
+      font-family: 'Special Elite', cursive;
+      color: #f0c070;
+    }
+
+    @media (max-width: 500px) {
+      .card { padding: 2rem 1.4rem 2rem; }
+      .stamp { display: none; }
+      .trinity { font-size: 0.7rem; }
+      .title { font-size: 1.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+
+  <main class="card">
+
+    <div class="stamp" aria-hidden="true">
+      <div class="stamp-text">Est.<br/>2026<br/>· MaaS ·</div>
+    </div>
+
+    <p class="eyebrow">Mid‑D‑Man presents</p>
+    <h1 class="title">Maybe<em>-as-a-</em>Service</h1>
+
+    <div class="ornament">❧ ✦ ❧</div>
+
+    <p class="subtitle">
+      "Like Schrödinger's cat, the answer is simultaneously yes and no —<br />
+      until observed, at which point it is still <em>maybe.</em>"
+    </p>
+
+    <div class="ornament">· · · · · · · · · · · · · · · · ·</div>
+
+    <table class="trinity" aria-label="The decisiveness trinity">
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Answer</th>
+          <th>Certainty</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <a href="https://github.com/lukekarrys/yes-as-a-service"
+               target="_blank" rel="noopener">yes-as-a-service</a>
+          </td>
+          <td>✅ Yes</td>
+          <td>High</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="https://github.com/hotheadhacker/no-as-a-service"
+               target="_blank" rel="noopener">no-as-a-service</a>
+          </td>
+          <td>❌ No</td>
+          <td>Also high</td>
+        </tr>
+        <tr class="active">
+          <td>maybe-as-a-service ◂</td>
+          <td>🤷 Maybe</td>
+          <td>Please do not ask</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="response-wrap">
+      <span class="response-label">Communiqué</span>
+      <div class="response-box" role="status" aria-live="polite">
+        <p class="response-text" id="response">
+          Press the button below for a non-committal response.<span class="caret"></span>
+        </p>
+      </div>
+    </div>
+    <p class="counter" id="counter" aria-live="polite"></p>
+
+    <div class="btn-wrap">
+      <button class="ask-btn" id="askBtn" onclick="getMaybe()">
+        Consult the Oracle
+      </button>
+    </div>
+
+    <div style="text-align:center;">
+      <span class="api-badge">
+        GET &nbsp;<code>YOUR_DOMAIN/maybe</code>
+      </span>
+    </div>
+
+    <div class="ornament" style="margin-top:2rem;">❧ ✦ ❧</div>
+
+    <footer>
+      <p>
+        Built by
+        <a href="https://github.com/Mid-D-Man" target="_blank" rel="noopener">Mid‑D‑Man</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/Mid-D-Man/maybe-as-a-service"
+           target="_blank" rel="noopener">GitHub</a>
+        &nbsp;·&nbsp;
+        MIT License — probably
+      </p>
+      <p>
+        Part of the trinity:
+        <a href="https://github.com/lukekarrys/yes-as-a-service" target="_blank" rel="noopener">Yes</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/hotheadhacker/no-as-a-service" target="_blank" rel="noopener">No</a>
+        &nbsp;·&nbsp; Maybe
+      </p>
+    </footer>
+  </main>
+
+  <script>
+    // ── Set this to your deployed API URL before pushing ─────────────────
+    const API_URL = 'https://YOUR_DEPLOYED_DOMAIN/maybe';
+    // ─────────────────────────────────────────────────────────────────────
+
+    const responseEl = document.getElementById('response');
+    const counterEl  = document.getElementById('counter');
+    const btn        = document.getElementById('askBtn');
+    let askCount     = 0;
+    let typeInterval = null;
+
+    async function getMaybe() {
+      btn.disabled = true;
+      responseEl.classList.add('fading');
+      responseEl.innerHTML = 'Consulting the oracle<span class="caret"></span>';
+
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const { maybe } = await res.json();
+        askCount++;
+        counterEl.textContent = `Consulted ${askCount} time${askCount > 1 ? 's' : ''} — still no commitment.`;
+        responseEl.classList.remove('fading');
+        typewrite(maybe);
+      } catch (err) {
+        responseEl.classList.remove('fading');
+        responseEl.innerHTML =
+          'The oracle is presently unavailable. Inshallah, try again later.<span class="caret"></span>';
+        console.error('[MaaS]', err);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function typewrite(text) {
+      clearInterval(typeInterval);
+      let i = 0;
+      typeInterval = setInterval(() => {
+        i++;
+        responseEl.innerHTML =
+          escapeHtml(text.slice(0, i)) + '<span class="caret"></span>';
+        if (i >= text.length) clearInterval(typeInterval);
+      }, 22);
+    }
+
+    function escapeHtml(s) {
+      return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+  </html>
