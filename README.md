@@ -5,7 +5,7 @@
 </p>
 
 > *"Like Schrödinger's cat, this API's answer is simultaneously yes and no — existing in a quantum superposition of commitment — until you make a decision, at which point it's still maybe."*
-
+<!-- GitAds-Verify: 2CCAJY2HA66V8G5FCTX9CQJXVSRI3J8O -->
 Sometimes you can't say yes. Sometimes you can't say no.  
 Sometimes — most times — the honest answer is an **Inshallah**.
 
